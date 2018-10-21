@@ -46,8 +46,13 @@ func (p *ModelFieldParser) Parse(fieldStr string) (*meta.Field, error) {
 	}
 
 	if sc > 1 {
+		tb := NewTypeFieldBuilder()
 		typ := components[1]
-		mf.Typ = typ
+		t, err := tb.GetType(typ)
+
+		if err == nil {
+			mf.Typ = t
+		}
 	}
 
 	if sc > 2 {

@@ -5,12 +5,26 @@ import (
 	"fmt"
 )
 
+// TypeField contains the data type of field
+type TypeField struct {
+
+	// Name should be string, int, array or the name of entity
+	Name string
+
+	// EntityRelated to Array
+	EntityRelated string
+}
+
+func (f TypeField) String() string {
+	return fmt.Sprintf("meta.TypeField(Name:%v, EntityRelated:%v)", f.Name, f.EntityRelated)
+}
+
 // Field represent the meta data  relevant related with field
 type Field struct {
 	// Field Name
 	Name string
 	// Field Type ej: int, string, ...
-	Typ string
+	Typ *TypeField
 	// Tags annotated in the field
 	Tags []string
 }
