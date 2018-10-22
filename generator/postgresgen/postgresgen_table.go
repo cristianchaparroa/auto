@@ -3,6 +3,7 @@ package postgresgen
 import (
 	"bytes"
 	"fmt"
+	"strings"
 
 	"github.com/cristianchaparroa/auto/meta"
 )
@@ -18,7 +19,9 @@ func NewPostgresTable() *PostgresTable {
 
 // Generate the sql query to create a table for postgres
 func (g *PostgresTable) Generate(m *meta.ModelStruct) (string, error) {
-	sql := fmt.Sprintf("CREATE TABLE %v ();", m.ModelName)
+
+	tableName := strings.ToUpper(m.ModelName)
+	sql := fmt.Sprintf("CREATE TABLE %v ();", tableName)
 
 	var buffer bytes.Buffer
 	buffer.WriteString(sql)
@@ -29,7 +32,7 @@ func (g *PostgresTable) Generate(m *meta.ModelStruct) (string, error) {
 
 	for _, f := range fs {
 		sqlField, _ := cg.Create(m.ModelName, f)
-		buffer.WriteString("\n\t" + sqlField)
+		buffer.WriteString(fmt.Sprintf("\n%s;", sqlField))
 	}
 
 	return buffer.String(), nil

@@ -22,7 +22,7 @@ func (g *PostgresColumn) Create(tableName string, f *meta.Field) (string, error)
 	dataType, err := tb.GetType(f)
 
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	dataTypeStr := strings.ToUpper(fmt.Sprintf(`%v`, dataType))
@@ -38,7 +38,7 @@ func (g *PostgresColumn) ChangeType(tableName string, f *meta.Field) (string, er
 	dataType, err := tb.GetType(f)
 
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	dataTypeStr := strings.ToUpper(fmt.Sprintf(`%v`, dataType))

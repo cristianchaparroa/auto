@@ -1,14 +1,8 @@
 package generator
 
-import "github.com/cristianchaparroa/auto/generator/postgresgen"
-
-const (
-	// MysqlDriver is the driver used to build tables for Mysql
-	MysqlDriver string = "mysql"
-	// OracleDriver is the driver used to build tables for Oracle
-	OracleDriver string = "oracle"
-	// PostgresDriver is the driver used to build tables for Postgres
-	PostgresDriver string = "postgres"
+import (
+	"github.com/cristianchaparroa/auto/connection"
+	"github.com/cristianchaparroa/auto/generator/postgresgen"
 )
 
 // TableBuilder creates an instance of Table generator
@@ -23,15 +17,15 @@ func NewTableBuilder(driver string) *TableBuilder {
 
 // GetTableGenerator retrieves the table generator according with the driver
 func (b *TableBuilder) GetTableGenerator() TableGenerator {
-	if b.Driver == PostgresDriver {
+	if b.Driver == connection.PostgresDriver {
 		return postgresgen.NewPostgresTable()
 	}
 
-	if b.Driver == OracleDriver {
+	if b.Driver == connection.OracleDriver {
 
 	}
 
-	if b.Driver == MysqlDriver {
+	if b.Driver == connection.MysqlDriver {
 
 	}
 	return nil

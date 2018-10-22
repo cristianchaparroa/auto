@@ -28,6 +28,17 @@ func TestPostgresgenColumnCreate(t *testing.T) {
 	fmt.Println(sql)
 }
 
+func TestPosgresgenColumnCreateNOK(t *testing.T) {
+	g := NewPostgresColumn()
+
+	_, err := g.Create("user", nil)
+
+	if err == nil {
+		t.Error("Expected an error but get nil")
+	}
+
+}
+
 func TestPostgresgenColumnChangeType(t *testing.T) {
 	g := NewPostgresColumn()
 
@@ -45,4 +56,14 @@ func TestPostgresgenColumnChangeType(t *testing.T) {
 	}
 	fmt.Println(sql)
 
+}
+
+func TestPostgresgenColumnChangeTypeNOK(t *testing.T) {
+	g := NewPostgresColumn()
+
+	_, err := g.ChangeType("user", nil)
+
+	if err == nil {
+		t.Error("Expected an error but get nil")
+	}
 }

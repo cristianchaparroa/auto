@@ -13,17 +13,39 @@ const (
 	// TypePosgresVarchar is the keyword Varchar
 	TypePosgresVarchar TypeColumn = "varchar"
 
-	// TypePostgresNumeric is the keyword Numeric
-	TypePostgresNumeric TypeColumn = "numeric"
-
-	// TypePostgresInt reprsent a integer sql  type supported by postgres
+	// TypePostgresInt reprsent a int  sql  type supported by postgres
 	TypePostgresInt TypeColumn = "int"
 
-	// TypePostgresBoolean represents a SQl Boolean type
-	TypePostgresBoolean TypeColumn = "boolean"
+	// TypePostgresSmallInt represent a small int sql type supported by postgres
+	TypePostgresSmallInt TypeColumn = "smallint"
+
+	// TypePostgresInteger reprsent a integer  sql  type supported by postgres
+	TypePostgresInteger TypeColumn = "integer"
+
+	// TypePostgresDecimal represents a decimal sql type supported by postgres
+	TypePostgresDecimal TypeColumn = "decimal"
 
 	// TypePostgresBigInt represents a SQl Bigint type
 	TypePostgresBigInt TypeColumn = "bigint"
+
+	// TypePostgresNumeric is the keyword Numeric
+	TypePostgresNumeric TypeColumn = "numeric"
+
+	// TypePostgresReal represents real sql type supported by postgres
+	TypePostgresReal TypeColumn = "real"
+
+	// TypePostgresDoublePrecision represents  TypePostgresDoublePrecision
+	// sql type supported by postgres
+	TypePostgresDoublePrecision TypeColumn = "double precision"
+
+	// TypePostgresSerial represents serial sql data type supported by postgres
+	TypePostgresSerial TypeColumn = "serial"
+
+	// TypePostgresBigSerial represents bigserial sql data type supported by postgres
+	TypePostgresBigSerial TypeColumn = "bigserial"
+
+	// TypePostgresBoolean represents a SQl Boolean type
+	TypePostgresBoolean TypeColumn = "boolean"
 
 	// TypePostgresTimestamp  represents a SQL timestamp type
 	TypePostgresTimestamp TypeColumn = "timestamp"

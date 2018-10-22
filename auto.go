@@ -5,9 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/cristianchaparroa/auto/connection"
 	"github.com/cristianchaparroa/auto/meta"
 	"github.com/cristianchaparroa/auto/parser"
 	"github.com/cristianchaparroa/auto/scanner"
+	"github.com/cristianchaparroa/auto/schema"
 )
 
 // Auto defines the interface to Auto tool
@@ -41,11 +43,14 @@ func NewGenerator() *Generator {
 }
 
 // Generate tables from models
-func (g *Generator) Generate(path string) error {
+func (g *Generator) Generate(path, driver, host, user, pass, database string, port int) error {
 
 	// 1. Scan the paths
 	// 2. Read the files
 	// 3. parse the files
+	// 4. get a database managr
+	// 5. connect with respective database
+	// 6. execute all changes scanned
 	paths, err := g.Scan(path)
 
 	if err != nil {
@@ -65,8 +70,10 @@ func (g *Generator) Generate(path string) error {
 		panic(err)
 	}
 
-	// after here should be able to generate tables
-	return nil
+	c := connection.Config{Driver: driver, Host: host, Port: port, User: user, Password: pass}
+	dm := schema.NewDatabaseManager(c)
+
+	return dm.Execute()
 }
 
 // Scan models  directory and retrieve the file paths to parse files
