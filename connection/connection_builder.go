@@ -30,11 +30,13 @@ func (b *Builder) GetConnection(c Config) (Connection, error) {
 	}
 
 	if c.Driver == OracleDriver {
-
+		oc := NewOracleConnection(c)
+		return oc, nil
 	}
 
 	if c.Driver == MysqlDriver {
-
+		mc := NewMysqlConnection(c)
+		return mc, nil
 	}
 
 	return nil, fmt.Errorf("%s :%s", ConnectionNotSupportedError, c.Driver)

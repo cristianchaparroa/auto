@@ -9,9 +9,40 @@
   revision = "44e46d280b43ec1531bb25252440e34f1b800b65"
   version = "v1.0.0"
 
+[[projects]]
+  digest = "1:adea5a94903eb4384abef30f3d878dc9ff6b6b5b0722da25b82e5169216dfb61"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "d523deb1b23d913de5bdada721a6071e71283618"
+  version = "v1.4.0"
+
+[[projects]]
+  digest = "1:8ef506fc2bb9ced9b151dafa592d4046063d744c646c1bbe801982ce87e4bc24"
+  name = "github.com/lib/pq"
+  packages = [
+    ".",
+    "oid",
+  ]
+  pruneopts = "UT"
+  revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
+  version = "v1.0.0"
+
+[[projects]]
+  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  pruneopts = "UT"
+  revision = "ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06"
+  version = "v1.2.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/fatih/camelcase"]
+  input-imports = [
+    "github.com/fatih/camelcase",
+    "github.com/go-sql-driver/mysql",
+    "github.com/lib/pq",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

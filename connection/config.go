@@ -8,4 +8,6 @@ type Config struct {
 	Password string
 	Database string
 	Driver   string
+
+	Orcl string
 }

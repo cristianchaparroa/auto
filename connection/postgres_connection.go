@@ -18,7 +18,7 @@ func NewPostgresConnection(c Config) *Postgres {
 	return &Postgres{Config: c}
 }
 
-// Open it the function that generates a connection with postgres
+// Open  generates a connection with postgres
 func (p *Postgres) Open() (*sql.DB, error) {
 	c := p.Config
 	source := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s", c.Host, c.Port, c.User, c.Password, c.Database)
