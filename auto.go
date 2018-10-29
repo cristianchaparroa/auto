@@ -71,7 +71,10 @@ func (g *Generator) Generate(path, driver, host, user, pass, database string, po
 	}
 
 	c := connection.Config{Driver: driver, Host: host, Port: port, User: user, Password: pass}
-	dm := schema.NewDatabaseManager(c)
+
+	sb := schema.NewManagerBuilder(driver)
+
+	dm := sb.GetManager(c)
 
 	return dm.Execute()
 }
@@ -88,8 +91,9 @@ func (g *Generator) ReadFile(path string) ([]byte, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Print(err)
+		return nil, err
 	}
-	return b, err
+	return b, nil
 }
 
 // ReadAll  files in the models directory

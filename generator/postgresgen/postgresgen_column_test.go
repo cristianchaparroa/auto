@@ -1,7 +1,6 @@
 package postgresgen
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/cristianchaparroa/auto/meta"
@@ -25,7 +24,6 @@ func TestPostgresgenColumnCreate(t *testing.T) {
 	if sqlExpected != sql {
 		t.Errorf("Expected %v but get:%v", sqlExpected, sql)
 	}
-	fmt.Println(sql)
 }
 
 func TestPosgresgenColumnCreateNOK(t *testing.T) {
@@ -54,8 +52,6 @@ func TestPostgresgenColumnChangeType(t *testing.T) {
 	if sqlExpected != sql {
 		t.Errorf("Expected %v but get:%v", sqlExpected, sql)
 	}
-	fmt.Println(sql)
-
 }
 
 func TestPostgresgenColumnChangeTypeNOK(t *testing.T) {

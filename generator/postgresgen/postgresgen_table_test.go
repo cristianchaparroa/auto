@@ -1,7 +1,6 @@
 package postgresgen
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/cristianchaparroa/auto/meta"
@@ -54,10 +53,10 @@ func TestPostgresTableGenerateWithFields(t *testing.T) {
 
 	m.Fields = fs
 
-	sql, err := pt.Generate(m)
+	_, err := pt.Generate(m)
 
 	if err != nil {
 		t.Error(err)
 	}
-	fmt.Println(sql)
+	//fmt.Println(sql)
 }

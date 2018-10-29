@@ -108,13 +108,13 @@ func TestParse(t *testing.T) {
 	if len(bs) != 3 {
 		t.Errorf("Expected 3 files read but get %v", len(bs))
 	}
-	ms, err := g.ParseAll(bs)
+	_, err = g.ParseAll(bs)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	fmt.Println(ms)
+	//fmt.Println(ms)
 }
 
 func TestParseAll(t *testing.T) {

@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -60,7 +59,7 @@ func Test_ParseFields(t *testing.T) {
 	rs := len(fs)
 
 	if rs != 3 {
-		fmt.Println(fs)
+		// fmt.Println(fs)
 		t.Errorf("Expected 3 but get:%v", rs)
 	}
 }

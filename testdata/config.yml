@@ -1,0 +1,6 @@
+Driver: Postgres
+Host: localhost
+Port: 5432
+Schema: test
+User: user
+Pass: pass
