@@ -13,7 +13,7 @@ import (
 type Manager interface {
 
 	// Execute creates, updates, delete all changes in models scanned
-	Execute() error
+	Execute(ms []*meta.ModelStruct) error
 
 	// Clean the schema
 	Clean() error
@@ -35,7 +35,7 @@ func NewManagerBuilder(driver string) *ManagerBuilder {
 }
 
 // GetManager gets a manager for driver selected
-func (m *ManagerBuilder) GetManager(c connection.Config) Manager {
+func (m *ManagerBuilder) GetManager(c *connection.Config) Manager {
 
 	if c.Driver == connection.PostgresDriver {
 		return NewPostgresManager(c)
@@ -54,12 +54,12 @@ func (m *ManagerBuilder) GetManager(c connection.Config) Manager {
 
 // DatabaseManager is concret manager for database
 type DatabaseManager struct {
-	Config     connection.Config
+	Config     *connection.Config
 	Connection *sql.DB
 }
 
-// NewDatabaseManager creates a pointer to DatabaseManager
-func GetConnection(c connection.Config) *sql.DB {
+// GetConnection creates a pointer to DatabaseManager
+func GetConnection(c *connection.Config) *sql.DB {
 
 	cb := connection.NewBuilder()
 
@@ -114,18 +114,4 @@ func (m *DatabaseManager) CreateTables(ms []*meta.ModelStruct) ([]sql.Result, er
 	}
 
 	return rs, nil
-}
-
-// Execute generates the whole changes in the schema
-func (m *DatabaseManager) Execute() error {
-
-	// defines here how to do the things
-	// drop-create:
-	//    1. Clean SCHEMA
-	// 		2. Generate all queries to create
-	// Update strategy:
-	// 	  1. First verify if table exist
-	//	  2. If table doesn't exist create it and all
-	// 	  3. If table exist check the modifications in fields
-	return nil
 }

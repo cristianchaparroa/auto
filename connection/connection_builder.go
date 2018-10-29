@@ -22,7 +22,7 @@ func NewBuilder() *Builder {
 }
 
 // GetConnection retrieves specific connection according with driver
-func (b *Builder) GetConnection(c Config) (Connection, error) {
+func (b *Builder) GetConnection(c *Config) (Connection, error) {
 
 	if c.Driver == PostgresDriver {
 		pc := NewPostgresConnection(c)

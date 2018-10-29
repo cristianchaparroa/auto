@@ -3,7 +3,7 @@ package connection
 import "testing"
 
 func TestPostgresOpen(t *testing.T) {
-	c := Config{}
+	c := &Config{}
 	pc := NewPostgresConnection(c)
 
 	_, err := pc.Open()

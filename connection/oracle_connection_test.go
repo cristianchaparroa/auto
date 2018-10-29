@@ -3,7 +3,7 @@ package connection
 import "testing"
 
 func TestOracleOpen(t *testing.T) {
-	c := Config{}
+	c := &Config{}
 	oc := NewOracleConnection(c)
 
 	_, err := oc.Open()

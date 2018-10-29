@@ -17,7 +17,7 @@ func TestNewBuilder(t *testing.T) {
 func TestBuilderGetConnectionNOK(t *testing.T) {
 	cb := NewBuilder()
 
-	c := Config{Driver: "somethingwrong"}
+	c := &Config{Driver: "somethingwrong"}
 	_, err := cb.GetConnection(c)
 
 	expectedErr := fmt.Sprintf("%s :%s", ConnectionNotSupportedError, c.Driver)
@@ -40,7 +40,7 @@ func TestBuilderGetConnection(t *testing.T) {
 	}
 
 	for _, tc := range test {
-		c := Config{Driver: tc.Driver}
+		c := &Config{Driver: tc.Driver}
 		conn, err := cb.GetConnection(c)
 
 		if err != nil {

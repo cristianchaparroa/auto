@@ -8,7 +8,7 @@ type OracleManager struct {
 }
 
 // NewOracleManager returns a pointer for OracleManager
-func NewOracleManager(c connection.Config) *OracleManager {
+func NewOracleManager(c *connection.Config) *OracleManager {
 	conn := GetConnection(c)
 
 	pm := &OracleManager{}

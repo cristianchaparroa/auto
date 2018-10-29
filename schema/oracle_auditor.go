@@ -7,3 +7,7 @@ type OracleAuditor struct{}
 func (a *OracleAuditor) Create() (string, error) {
 	return "", nil
 }
+
+func (a *OracleAuditor) ExistsAuditor() bool {
+	return false
+}

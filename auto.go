@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/cristianchaparroa/auto/connection"
+	"github.com/cristianchaparroa/auto/config"
 	"github.com/cristianchaparroa/auto/meta"
 	"github.com/cristianchaparroa/auto/parser"
 	"github.com/cristianchaparroa/auto/scanner"
@@ -15,7 +15,7 @@ import (
 // Auto defines the interface to Auto tool
 type Auto interface {
 	// Generate tables from models
-	Generate(path string) error
+	Generate(c *config.Config) error
 
 	// Scan models  directory and retrieve the file paths to parse files
 	Scan(path string) ([]string, error)
@@ -43,7 +43,7 @@ func NewGenerator() *Generator {
 }
 
 // Generate tables from models
-func (g *Generator) Generate(path, driver, host, user, pass, database string, port int) error {
+func (g *Generator) Generate(c *config.Config) error {
 
 	// 1. Scan the paths
 	// 2. Read the files
@@ -51,7 +51,7 @@ func (g *Generator) Generate(path, driver, host, user, pass, database string, po
 	// 4. get a database managr
 	// 5. connect with respective database
 	// 6. execute all changes scanned
-	paths, err := g.Scan(path)
+	paths, err := g.Scan(c.PathModels)
 
 	if err != nil {
 		log.Println(err)
@@ -64,19 +64,27 @@ func (g *Generator) Generate(path, driver, host, user, pass, database string, po
 		panic(err)
 	}
 
-	_, err = g.ParseAll(bs)
+	ms, err := g.ParseAll(bs)
 
 	if err != nil {
 		panic(err)
 	}
 
-	c := connection.Config{Driver: driver, Host: host, Port: port, User: user, Password: pass}
+	sb := schema.NewManagerBuilder(c.Driver)
 
-	sb := schema.NewManagerBuilder(driver)
+	dbc := config.NewDatabaseConfig(c)
 
-	dm := sb.GetManager(c)
+	dm := sb.GetManager(dbc)
 
-	return dm.Execute()
+	if dm == nil {
+		panic("It's not possible to retrive the schema manager")
+	}
+	err = dm.Execute(ms)
+
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 // Scan models  directory and retrieve the file paths to parse files

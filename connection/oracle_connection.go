@@ -7,12 +7,12 @@ import (
 
 // Oracle is the concret connection to database
 type Oracle struct {
-	Config Config
+	Config *Config
 	Db     *sql.DB
 }
 
 // NewOracleConnection generates a Oracle pointer
-func NewOracleConnection(c Config) *Oracle {
+func NewOracleConnection(c *Config) *Oracle {
 	return &Oracle{Config: c}
 }
 

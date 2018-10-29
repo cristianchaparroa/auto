@@ -8,6 +8,9 @@ import (
 type Auditor interface {
 	// Create returns the sql that create the trigger to audit the changes in schema
 	Create() (string, error)
+
+	// ExistsAuditor verifies if exist an auditor
+	ExistsAuditor() bool
 }
 
 // AuditorBuilder creates an specific autor acording with the setup driver

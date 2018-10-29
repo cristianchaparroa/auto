@@ -7,3 +7,7 @@ type PostgresAuditor struct{}
 func (a *PostgresAuditor) Create() (string, error) {
 	return "", nil
 }
+
+func (a *PostgresAuditor) ExistsAuditor() bool {
+	return false
+}

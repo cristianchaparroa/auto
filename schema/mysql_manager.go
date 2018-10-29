@@ -8,7 +8,7 @@ type MysqlManager struct {
 }
 
 // NewMysqlManager returns a pointer for MysqlManager
-func NewMysqlManager(c connection.Config) *MysqlManager {
+func NewMysqlManager(c *connection.Config) *MysqlManager {
 	conn := GetConnection(c)
 
 	pm := &MysqlManager{}

@@ -3,7 +3,7 @@ package connection
 import "testing"
 
 func TestMysqlOpen(t *testing.T) {
-	c := Config{}
+	c := &Config{}
 	mc := NewMysqlConnection(c)
 
 	_, err := mc.Open()

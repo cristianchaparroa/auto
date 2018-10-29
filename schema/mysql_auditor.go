@@ -7,3 +7,7 @@ type MysqlAuditor struct{}
 func (a *MysqlAuditor) Create() (string, error) {
 	return "", nil
 }
+
+func (a *MysqlAuditor) ExistsAuditor() bool {
+	return false
+}

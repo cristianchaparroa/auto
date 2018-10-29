@@ -9,12 +9,12 @@ import (
 
 // Mysql is the concret connection to database
 type Mysql struct {
-	Config Config
+	Config *Config
 	Db     *sql.DB
 }
 
 // NewMysqlConnection generates a Mysql pointer
-func NewMysqlConnection(c Config) *Mysql {
+func NewMysqlConnection(c *Config) *Mysql {
 	return &Mysql{Config: c}
 }
 
