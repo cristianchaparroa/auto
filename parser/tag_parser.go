@@ -1,5 +1,11 @@
 package parser
 
+import (
+	"strings"
+
+	"github.com/cristianchaparroa/auto/meta"
+)
+
 // TagParser prove the definition of methods to parse a tag in a field
 type TagParser interface {
 }
@@ -11,4 +17,52 @@ type ModelTagParser struct {
 //NewModelTagParser creates a pointer for
 func NewModelTagParser() *ModelTagParser {
 	return &ModelTagParser{}
+}
+
+// Parse the tags in column
+func (p *ModelTagParser) Parse(tagsLine string) []*meta.Tag {
+	tagsLine = strings.Replace(tagsLine, "sql:", "", -1)
+	tagsLine = strings.Replace(tagsLine, "\"", "", -1)
+	tags := strings.Split(tagsLine, ",")
+
+	ts := make([]*meta.Tag, 0)
+
+	tb := NewTypeTagBuilder()
+
+	for _, t := range tags {
+
+		parts := strings.Split(t, "=")
+		sz := len(parts)
+		tag := &meta.Tag{}
+
+		if sz > 0 && p.IsPrimaryKeyTag(parts[0]) {
+			val := parts[0]
+			tp := tb.GetType(val)
+			tag.Value = "pk"
+			tag.Typ = tp
+			ts = append(ts, tag)
+			continue
+		}
+
+		if sz > 0 {
+			typ := parts[0]
+			tp := tb.GetType(typ)
+			tag.Typ = tp
+		}
+
+		if sz > 1 {
+			val := parts[1]
+			tag.Value = val
+		}
+		ts = append(ts, tag)
+	}
+	return ts
+}
+
+// IsPrimaryKeyTag verifies if value of tag is a primary key
+func (p *ModelTagParser) IsPrimaryKeyTag(value string) bool {
+	if "pk" == value {
+		return true
+	}
+	return false
 }

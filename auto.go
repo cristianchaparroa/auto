@@ -3,7 +3,6 @@ package auto
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 
 	"github.com/cristianchaparroa/auto/config"
 	"github.com/cristianchaparroa/auto/meta"
@@ -39,12 +38,12 @@ type Generator struct {
 
 // NewGenerator generate a pointer to Generator
 func NewGenerator() *Generator {
+
 	return &Generator{}
 }
 
 // Generate tables from models
 func (g *Generator) Generate(c *config.Config) error {
-
 	// 1. Scan the paths
 	// 2. Read the files
 	// 3. parse the files
@@ -54,8 +53,7 @@ func (g *Generator) Generate(c *config.Config) error {
 	paths, err := g.Scan(c.PathModels)
 
 	if err != nil {
-		log.Println(err)
-		return err
+		panic(err)
 	}
 
 	bs, err := g.ReadAll(paths)
@@ -113,7 +111,7 @@ func (g *Generator) ReadAll(paths []string) ([][]byte, error) {
 
 		bs, err := g.ReadFile(p)
 		if err != nil {
-			log.Printf("Is not possible to read the file:%v, get the error:%v ", p, err)
+			return nil, err
 		} else {
 			files = append(files, bs)
 		}

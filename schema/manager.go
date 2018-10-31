@@ -2,10 +2,13 @@ package schema
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/cristianchaparroa/auto/connection"
 	"github.com/cristianchaparroa/auto/generator"
 	"github.com/cristianchaparroa/auto/meta"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // Manager is in charge of abstract the sql generation assets such as
@@ -79,23 +82,27 @@ func GetConnection(c *connection.Config) *sql.DB {
 
 // CreateTable create a table in database
 func (m *DatabaseManager) CreateTable(ms *meta.ModelStruct) (sql.Result, error) {
-
+	log.Info(fmt.Sprintf("auto:processing the model: %s \n", ms.ModelName))
 	c := m.Connection
 
 	tb := generator.NewTableBuilder()
 	tg := tb.GetTableGenerator(m.Config.Driver)
 	sql, err := tg.Generate(ms)
+	log.Info(fmt.Sprintf("\nauto:The sql generated is: \n %s \n", sql))
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	res, err := c.Exec(sql)
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
+	log.Info(fmt.Sprintf("auto:processing the model: %s was finnished \n\n", ms.ModelName))
 	return res, nil
 }
 

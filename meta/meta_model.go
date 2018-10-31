@@ -5,6 +5,23 @@ import (
 	"fmt"
 )
 
+// TypeTag represent the type of tag
+type TypeTag string
+
+func (tg *TypeTag) String() string {
+	return fmt.Sprintf("%s", *tg)
+}
+
+// Tag represents the tag inside of sql tag
+type Tag struct {
+	Value string
+	Typ   *TypeTag
+}
+
+func (t *Tag) String() string {
+	return fmt.Sprintf("Tag[value:%s, type:%v]", t.Value, t.Typ)
+}
+
 // TypeField contains the data type of field
 type TypeField struct {
 

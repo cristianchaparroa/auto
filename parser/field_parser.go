@@ -93,7 +93,6 @@ func (p *ModelFieldParser) ParseFields(structContent string) []*meta.Field {
 			mf, _ := p.Parse(l)
 			fs = append(fs, mf)
 		}
-
 	}
 	return fs
 }

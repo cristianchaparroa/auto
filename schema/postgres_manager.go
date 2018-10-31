@@ -15,8 +15,6 @@ type PostgresManager struct {
 //NewPostgresManager returns a manager for Postgres
 func NewPostgresManager(c *connection.Config) *PostgresManager {
 	conn := GetConnection(c)
-
-	fmt.Println(conn)
 	pm := &PostgresManager{&DatabaseManager{Config: c, Connection: conn}}
 	return pm
 }
