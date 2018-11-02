@@ -2,8 +2,11 @@ package config
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/cristianchaparroa/auto/connection"
+	log "github.com/sirupsen/logrus"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // Config contains all configurations
@@ -38,4 +41,22 @@ func NewDatabaseConfig(c *Config) *connection.Config {
 	dbConfig.Orcl = c.Orcl
 
 	return dbConfig
+}
+
+// NewConfig returns the config.yaml
+func NewConfig(path string) (*Config, error) {
+	msj := fmt.Sprintf("Loading config from:%s \n", path)
+	log.Info(msj)
+	c := &Config{}
+
+	yamlFile, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	err = yaml.Unmarshal(yamlFile, c)
+	if err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }

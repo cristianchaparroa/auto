@@ -4,60 +4,42 @@ Auto is an utility to create tables according with model definitions for you gol
 
 ### How to use
 
-1. You should create `auto.yml`  file in the root folder and
-after that you can use the tool an run the command
-
-```
-cd myproject
-auto .
-```
-
-2. You should run the tool with parameters
-
-```
-auto --driver=postgres --models=path/to/models
-```
-3.  You sould create `auto.yml`  file  in the root folder and after that you can integrate
-in the init of your proyect
+1. You should create `config.yml`  file in the root folder
 
 ```go
+
 func main() {
-    auto := NewAuto("path/to/models","postgres")
-    auto.switch expression {
-    case condition:
 
-    }etAutoUpdate(true)
+	auto := auto.NewGenerator()
+	c, err := config.NewConfig("config.yaml")
 
-    auto.Generate() // Stop the init of your application if something is wrong
+	if err != nil {
+		panic(err)
+	}
+
+	auto.Generate(c) // It'll stop the init of your application if something is wrong
 }
 ```
 
 
+
 #### Configuration
 
-The following is the configuration expected
+The following is and example for configuration file.
 
-```yml
+```yaml
+scan: models #if this file is in the root it'll for a root called models
 driver: postgres
-scan:  ./path/to/models
-update: auto
+host: localhost
+port: 5432
+schema: userlist
+database: list
+user: userlist
+password: userlist
 ```
 
 
-Colons can be used to align columns.
-
-| Configuration        | Definition   |
-| ------------- |:-------------:|
-| Driver      | Database type |
-| Scan        | Path directory where the models are |
-| update        | It allow to identify changes in the models an update the database or not. Posible values for this option: `auto` or `none`  |
-
-
-
 ### Models configuration
-
-#### Realations suported
-
 
 ### Testing
 
@@ -80,4 +62,4 @@ Colons can be used to align columns.
  - [ ] Suport Postgres generation
  - [ ] Suport Mysql generation
  - [ ] Suport Oracle generation
- - [ ] Support diferences between changes and no recreate all from scratch.(Add,drop, update...)
+ - [ ] Support changes in the schema  (Add,drop, update...)

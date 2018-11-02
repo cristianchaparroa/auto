@@ -1,7 +1,6 @@
 package auto
 
 import (
-	"fmt"
 	"io/ioutil"
 
 	"github.com/cristianchaparroa/auto/config"
@@ -96,7 +95,6 @@ func (g *Generator) ReadFile(path string) ([]byte, error) {
 
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Print(err)
 		return nil, err
 	}
 	return b, nil

@@ -78,6 +78,15 @@ func (p *ModelFieldParser) FilterComments(fieldStr string) string {
 	return fieldStr
 }
 
+// IsCommentedLine verifies if is a commented line to skeep it.
+func (p *ModelFieldParser) IsCommentedLine(fieldStr string) bool {
+	pattern := `^(\s*\/\/.*)`
+
+	isCommented, _ := regexp.MatchString(pattern, fieldStr)
+
+	return isCommented
+}
+
 // ParseFields  it parses the multiples fields in content body of struct
 func (p *ModelFieldParser) ParseFields(structContent string) []*meta.Field {
 	filtered := p.FilterComments(structContent)
@@ -87,6 +96,11 @@ func (p *ModelFieldParser) ParseFields(structContent string) []*meta.Field {
 	fs := make([]*meta.Field, 0)
 
 	for _, l := range lines {
+
+		if p.IsCommentedLine(l) {
+			continue
+		}
+
 		l = strings.TrimSpace(l)
 
 		if len(l) > 1 {

@@ -91,7 +91,6 @@ func (m *DatabaseManager) CreateTable(ms *meta.ModelStruct) (sql.Result, error) 
 	log.Info(fmt.Sprintf("\nauto:The sql generated is: \n %s \n", sql))
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 

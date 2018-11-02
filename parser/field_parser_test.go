@@ -53,7 +53,8 @@ func Test_ParseFields(t *testing.T) {
 
 	bodyContent := "Id        string        `sql:\"pk\"` \n" +
 		"Name      string        `sql:\"len=50\"` \n" +
-		"Books  []BookTest        `sql:\"manyToMany\"` //another comment \n"
+		"Books  []BookTest        `sql:\"manyToMany\"` //another comment \n" +
+		"// AnotherField string"
 	fs := fp.ParseFields(bodyContent)
 
 	rs := len(fs)
