@@ -19,10 +19,11 @@ func TestTagParserParse(t *testing.T) {
 		TagsNumber int
 	}{
 		{`sql:"pk"`, 1},
-		{`sql:"nullable=false,name=titulo"`, 2},
-		{`sql:"nullable=false,name=titulo,unique=true`, 3},
-		{`sql:"pk,name=title,length=80"`, 3},
+		{`sql:"nullable=false,name=titulo", json:"title"`, 2},
+		{`sql:"nullable=false,name=titulo,unique=true"`, 3},
+		{`sql:"pk,name=title,length=80", json:"name"`, 3},
 		{`sql:"type=bigint"`, 1},
+		{`json:"name"`, 0},
 	}
 
 	p := NewModelTagParser()

@@ -57,8 +57,10 @@ func (p *ModelFieldParser) Parse(fieldStr string) (*meta.Field, error) {
 
 	if sc > 2 {
 		tagsLine := components[2]
+
+		tp := NewModelTagParser()
 		// Todo: replace it for TagParser
-		tags := strings.Split(tagsLine, ",")
+		tags := tp.Parse(tagsLine)
 		mf.Tags = tags
 	}
 	return mf, nil

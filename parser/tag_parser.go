@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/cristianchaparroa/auto/meta"
@@ -21,6 +22,13 @@ func NewModelTagParser() *ModelTagParser {
 
 // Parse the tags in column
 func (p *ModelTagParser) Parse(tagsLine string) []*meta.Tag {
+
+	tagsLine = p.ExtractSQLContent(tagsLine)
+
+	if len(tagsLine) == 0 {
+		return nil
+	}
+
 	tagsLine = strings.Replace(tagsLine, "sql:", "", -1)
 	tagsLine = strings.Replace(tagsLine, "\"", "", -1)
 	tags := strings.Split(tagsLine, ",")
@@ -57,6 +65,18 @@ func (p *ModelTagParser) Parse(tagsLine string) []*meta.Tag {
 		ts = append(ts, tag)
 	}
 	return ts
+}
+
+// ExtractSQLContent retrieves just the content inside on sql:" ... "
+func (p *ModelTagParser) ExtractSQLContent(tagsLine string) string {
+
+	pattern := `\s*sql:"(.|\n)*?"`
+
+	r := regexp.MustCompile(pattern)
+
+	sqlContent := r.FindString(tagsLine)
+
+	return sqlContent
 }
 
 // IsPrimaryKeyTag verifies if value of tag is a primary key

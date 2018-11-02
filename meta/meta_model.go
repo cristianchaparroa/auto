@@ -43,7 +43,7 @@ type Field struct {
 	// Field Type ej: int, string, ...
 	Typ *TypeField
 	// Tags annotated in the field
-	Tags []string
+	Tags []*Tag
 }
 
 func (f Field) String() string {
