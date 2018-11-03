@@ -23,6 +23,10 @@ const (
 
 	// TypeTagLength indicates the length of column
 	TypeTagLength meta.TypeTag = "length"
+
+	// TypeTagRelation indicates that the current model have a relation with another
+	// model and the current field indicates the data to build the the relation.
+	TypeTagRelation meta.TypeTag = "rel"
 )
 
 // TypeTagBuilder is in charge to build the type of tag
@@ -60,6 +64,10 @@ func (b *TypeTagBuilder) GetType(tag string) *meta.TypeTag {
 	}
 
 	if meta.TypeTag(tag) == TypeTagLength {
+		return &typ
+	}
+
+	if meta.TypeTag(tag) == TypeTagRelation {
 		return &typ
 	}
 
