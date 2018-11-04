@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -15,6 +16,9 @@ type FieldParser interface {
 
 	// ParseFields retrieves an array of fields from content struct
 	ParseFields(structContent string) []*meta.Field
+
+	// IsRelation verifies is the current field is an relation statement
+	IsRelation(tags []*meta.Tag) bool
 }
 
 // ModelFieldParser geneates a meta field  throug string representation of entity model
@@ -30,7 +34,6 @@ func NewModelFieldParser() *ModelFieldParser {
 func (p *ModelFieldParser) Parse(fieldStr string) (*meta.Field, error) {
 
 	filtered := p.FilterComments(fieldStr)
-
 	components := strings.Fields(filtered)
 	sc := len(components)
 
@@ -55,14 +58,23 @@ func (p *ModelFieldParser) Parse(fieldStr string) (*meta.Field, error) {
 		}
 	}
 
-	if sc > 2 {
-		tagsLine := components[2]
+	tags := p.ParseTags(filtered)
 
-		tp := NewModelTagParser()
-		// Todo: replace it for TagParser
-		tags := tp.Parse(tagsLine)
+	if len(tags) > 0 {
 		mf.Tags = tags
+		mf.IsRelation = p.IsRelation(tags)
 	}
+
+	if mf.IsRelation {
+		rel, err := p.ParseRelation(mf.Name, tags)
+
+		if err != nil {
+			return nil, err
+		}
+
+		mf.Relation = rel
+	}
+
 	return mf, nil
 }
 
@@ -111,4 +123,44 @@ func (p *ModelFieldParser) ParseFields(structContent string) []*meta.Field {
 		}
 	}
 	return fs
+}
+
+// IsRelation verifies if the field is a relation statement
+func (p *ModelFieldParser) IsRelation(tags []*meta.Tag) bool {
+
+	for _, t := range tags {
+		if fmt.Sprintf("%v", t.Typ) == string(TypeTagRelation) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ParseTags retrieves the tags in a field statement
+func (p *ModelFieldParser) ParseTags(fieldStr string) []*meta.Tag {
+	tp := NewModelTagParser()
+	tagsLine := tp.ExtractTagStatement(fieldStr)
+
+	tags := tp.Parse(tagsLine)
+	return tags
+}
+
+// ParseRelation retrieves the relation statement according with field definition
+func (p *ModelFieldParser) ParseRelation(fieldName string, tags []*meta.Tag) (*meta.Relation, error) {
+
+	relStmt := ""
+	for _, t := range tags {
+		if fmt.Sprintf("%v", t.Typ) == string(TypeTagRelation) {
+			relStmt = t.Value
+		}
+	}
+
+	rp := NewTagRelationParser()
+	rel, err := rp.Parse(relStmt, fieldName)
+
+	if err != nil {
+		return nil, err
+	}
+	return rel, nil
 }

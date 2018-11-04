@@ -51,7 +51,7 @@ Suppose that you have the Post of web page and you have the PostDetail related t
 ```go
 type Post struct {
 	Id string
-	PostDetail PostDetail `sql:rel=(type:11, to=PostDetail)`
+	PostDetail PostDetail `sql:"rel=(type:11; to:PostDetail)" json:"post_detail"`
 	// PostDetail PostDetail `sql:rel=(type:11)`
 }
 ```
@@ -60,7 +60,7 @@ The following is the tag statament relation int the model PostDetail:
 ```go
 type PostDetail struct {
 	Id string
-	Post `sql:rel=(type:11, mappedBy=Post, name="post_id")`
+	Post `sql:"rel=(type:11; mappedBy:Post; name:post_id)"`
 }
 ```
 
@@ -70,8 +70,8 @@ Suppose that you have the Post of web page nad you have the Comments related to 
 
 ```go
 type Post struct{
-	Comments []Comments `sql:rel=(type=1*,to=Comments)`
-	// Comments []Comments `sql:rel=(type=1*)`
+	Comments []Comments `sql:"rel=(type=1*;to:Comments)"`
+	// Comments []Comments `sql:"rel=(type=1*)"`
 }
 ```
 
@@ -81,8 +81,8 @@ Back to the Post-Comments example, the model that represent the Many part is Com
 
 ```go
 type Comments struct{
-	Post Post `sql:rel=(type=*1,to=Post, name="post_id")`
-  // Post Post `sql:rel=(type=*1, name="post_id")`
+	Post Post `sql:"rel=(type=*1;to=Post; name:post_id)"`
+  // Post Post `sql:"rel=(type:*1; name:post_id)"`
 }
 ```
 In the last statement you can see the <name> property of tag `rel`, it represents the column name for the table generated in the model that represents the Many Part(Coments).
@@ -94,8 +94,8 @@ Suppose that you have many  Post of web page and many tags. The post should have
 ```go
 type Post struct {
 	Id string
-	Tags []Tag `sql:rel=(type:**, to=Tag)`
-	// Tags []Tag `sql:rel=(type:**)`
+	Tags []Tag `sql:"rel=(type:**; to:Tag)"`
+	// Tags []Tag `sql:"rel=(type:**)"`
 }
 ```
  The Tag should be part of zero or many Post
@@ -103,8 +103,8 @@ type Post struct {
  ```go
  type Tag struct {
 	    Id string
-		Posts []Post `sql:rel=(type:**, to=Post)`
-		// Posts []Post `sql:rel=(type:**)`
+		Posts []Post `sql:"rel=(type:**; to:Post)"`
+		// Posts []Post `sql:"rel=(type:**)"`
  }
  ```
  **Note:**

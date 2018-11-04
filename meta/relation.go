@@ -1,23 +1,27 @@
 package meta
 
+import (
+	"fmt"
+)
+
 const (
 	// OneToOne type relation representation
-	OneToOne TypeRelation = "11"
+	OneToOne RelationType = "11"
 
 	// OneToMany type relation representation usde in the model that represents
 	// the One part
-	OneToMany TypeRelation = "1*"
+	OneToMany RelationType = "1*"
 
 	// ManyToOne type relation representation used in the model  that represents
 	// the many part
-	ManyToOne TypeRelation = "*1"
+	ManyToOne RelationType = "*1"
 
 	// ManyToMany type relation representation
-	ManyToMany TypeRelation = "**"
+	ManyToMany RelationType = "**"
 )
 
-//TypeRelation indicates the type of relation between models
-type TypeRelation string
+//RelationType indicates the type of relation between models
+type RelationType string
 
 // Relation is the representation of relation between 2 models
 //
@@ -28,14 +32,14 @@ type TypeRelation string
 //
 // type Post struct {
 //    Id string
-//    PostDetail PostDetail `sql:rel=(type:11, to=PostDetail)`
-//    PostDetail PostDetail `sql:rel=(type:11)`
+//    PostDetail PostDetail `sql:"rel=(type:11, to:PostDetail)"`
+//    PostDetail PostDetail `sql:"rel=(type:11)"`
 // }
 //
 // The following is the tag statament relation int the model PostDetail:
 // type PostDetail struct {
 //    Id string
-//    Post `sql:rel=(type:11, mappedBy=Post, name="post_id")`
+//    Post `sql:"rel=(type:11, mappedBy:Post, name:post_id)"`
 // }
 //
 // 2. One to Many example:
@@ -43,8 +47,8 @@ type TypeRelation string
 // related to it, then you need to generate the following that in the One
 // Part (Post)
 // type Post struct{
-//    Comments []Comments `sql:rel=(type=1*,to=Comments)`
-//    Comments []Comments `sql:rel=(type=1*)`
+//    Comments []Comments `sql:"rel=(type:1*,to:Comments)"`
+//    Comments []Comments `sql:"rel=(type:1*)"`
 // }
 //
 // 3. Many To One example:
@@ -52,8 +56,8 @@ type TypeRelation string
 // is Commments, then the tag must be the following:
 //
 // type Comments struct{
-//    Post Post `sql:rel=(type=*1,to=Post, name="post_id")`
-//    Post Post `sql:rel=(type=*1, name="post_id")`
+//    Post Post `sql:"rel=(type:*1,to:Post, name:post_id)"`
+//    Post Post `sql:"rel=(type:*1, name:post_id)"`
 // }
 // In the last statement you can see the <name> property of tag rel, it represents
 // the column name for the table generated in the model that represents the
@@ -65,15 +69,15 @@ type TypeRelation string
 // The post should have zero or many tags
 // type Post struct {
 //    Id string
-//    Tags[] Tag `sql:rel=(type:**, to=Tag)`
-//    Tags[] Tag `sql:rel=(type:**)`
+//    Tags[] Tag `sql:"rel=(type:**, to:Tag)"`
+//    Tags[] Tag `sql:"rel=(type:**)"`
 // }
 //
 // The Tag should be part of zero or many Post
 // type Tag struct {
 //    Id string
-//    Posts[] Post `sql:rel=(type:**, to=Post)`
-//    Posts[] Post `sql:rel=(type:**)`
+//    Posts[] Post `sql:"rel=(type:**, to:Post)"`
+//    Posts[] Post `sql:"rel=(type:**)"`
 // }
 // Note:
 // As you can see in the above examples, is not mandatory `to` attribute in
@@ -82,7 +86,7 @@ type TypeRelation string
 type Relation struct {
 
 	// Type Relation
-	Typ TypeRelation
+	Typ RelationType
 
 	// Name, column name is the name of relation in database if is necesary
 	Name string
@@ -91,4 +95,9 @@ type Relation struct {
 	To string
 
 	MappedBy string
+}
+
+func (rel *Relation) String() string {
+	return fmt.Sprintf("Relation[Type:%v, Name:%s, To:%s, MappedBy:%s]",
+		rel.Typ, rel.Name, rel.To, rel.MappedBy)
 }

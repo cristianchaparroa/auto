@@ -86,3 +86,14 @@ func (p *ModelTagParser) IsPrimaryKeyTag(value string) bool {
 	}
 	return false
 }
+
+// ExtractTagStatement retrieves just the tags statement inside of fieldStr
+func (p *ModelTagParser) ExtractTagStatement(fieldStr string) string {
+	pattern := "\\s*`(.|\n)*?`"
+
+	r := regexp.MustCompile(pattern)
+
+	tagsStatement := r.FindString(fieldStr)
+
+	return tagsStatement
+}

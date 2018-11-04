@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"strings"
-
 	"github.com/cristianchaparroa/auto/meta"
 )
 
@@ -43,15 +41,6 @@ func NewTypeFieldBuilder() *TypeFieldBuilder {
 
 // GetType returns the type of field
 func (b *TypeFieldBuilder) GetType(typeField string) (*meta.TypeField, error) {
-
-	isArrayType := strings.Contains(typeField, "[]")
-
-	if isArrayType {
-		parts := strings.Split(typeField, "[]")
-		entity := parts[1]
-
-		return &meta.TypeField{Name: TypeFieldArray, EntityRelated: entity}, nil
-	}
 
 	return &meta.TypeField{Name: typeField}, nil
 }

@@ -60,7 +60,42 @@ func Test_ParseFields(t *testing.T) {
 	rs := len(fs)
 
 	if rs != 3 {
-		// fmt.Println(fs)
 		t.Errorf("Expected 3 but get:%v", rs)
 	}
+}
+
+func TestParseRelationFields(t *testing.T) {
+
+	var test = []struct {
+		FieldStr   string
+		IsRelation bool
+	}{
+		{"Name      string", false},
+		{"PostDetail PostDetail `sql:\"rel=(type:11; to:PostDetail)\"`", true},
+		{"PostDetail PostDetail `sql:\"rel=(type:11)\"`", true},
+		{"PostDetail PostDetail `sql:\"rel=(type:11; to:PostDetail)\", json:\"post_detail\"`", true},
+		{"Post Post `sql:\"rel=(type:11; mappedBy:Post; name:post_id)\"`", true},
+		{"Comments []Comments `sql:\"rel=(type:1*;to:Comments)\"`", true},
+		{"Post Post `sql:\"rel=(type:*1;to:Post; name:post_id)\"`", true},
+		{"Post Post `sql:\"rel=(type:*1; name:post_id)\"`", true},
+		{"Tags []Tag `sql:\"rel=(type:**; to:Tag)\"`", true},
+		{"Tags []Tag `sql:\"rel=(type:**)\"`", true},
+		{"Posts []Post `sql:\"rel=(type:**; to:Post)\"`", true},
+	}
+
+	fp := NewModelFieldParser()
+
+	for _, tc := range test {
+
+		fs, err := fp.Parse(tc.FieldStr)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if fs.IsRelation != tc.IsRelation {
+			t.Errorf("Expected relation equals to:%v, but get:%v", tc.IsRelation, fs.IsRelation)
+		}
+	}
+
 }
