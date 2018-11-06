@@ -19,7 +19,7 @@ type Tag struct {
 }
 
 func (t *Tag) String() string {
-	return fmt.Sprintf("Tag[value:%s, type:%v]", t.Value, t.Typ)
+	return fmt.Sprintf("meta.Tag(value:%s, type:%v)", t.Value, t.Typ)
 }
 
 // TypeField contains the data type of field

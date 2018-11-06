@@ -1,4 +1,4 @@
-package postgresgen
+package generator
 
 import (
 	"bytes"
@@ -18,7 +18,9 @@ func NewPostgresTable() *PostgresTable {
 }
 
 // Generate the sql query to create a table for postgres
-func (g *PostgresTable) Generate(m *meta.ModelStruct) (string, error) {
+func (g *PostgresTable) Generate(m *meta.ModelStruct) (ITableResult, error) {
+
+	result := &TableResult{}
 
 	tableName := strings.ToUpper(m.ModelName)
 	sql := fmt.Sprintf("CREATE TABLE %v ();", tableName)
@@ -30,10 +32,20 @@ func (g *PostgresTable) Generate(m *meta.ModelStruct) (string, error) {
 
 	cg := NewPostgresColumn()
 
+	relations := make([]*meta.Field, 0)
+
 	for _, f := range fs {
+
+		if f.IsRelation {
+			relations = append(relations, f)
+			continue
+		}
+
 		sqlField, _ := cg.Create(m.ModelName, f)
 		buffer.WriteString(fmt.Sprintf("\n%s;", sqlField))
 	}
 
-	return buffer.String(), nil
+	result.Relations = relations
+	result.SqlResult = buffer.String()
+	return result, nil
 }

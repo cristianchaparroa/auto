@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 
 	"github.com/cristianchaparroa/auto/connection"
@@ -47,7 +49,34 @@ func (m *PostgresManager) Execute(ms []*meta.ModelStruct) error {
 		return err
 	}
 
-	m.CreateTables(ms)
+	resps, errs := m.CreateTables(ms)
+
+	fmt.Println("--------responses------")
+	fmt.Println(len(resps))
+	var buffer bytes.Buffer
+
+	for _, err := range errs {
+		buffer.WriteString(err.Error() + "\n")
+	}
+
+	finalErr := buffer.String()
+
+	if len(finalErr) > 0 {
+		return errors.New(finalErr)
+	}
+
+	fmt.Println("--------relations------")
+
+	fs := make([]*meta.Field, 0)
+	for _, r := range resps {
+		fs = append(fs, r.Relations...)
+	}
+	fmt.Println(len(fs))
+	for _, rel := range fs {
+		fmt.Println(rel)
+	}
+
+	// from here creates the relations
 
 	// defines here how to do the things
 	// drop-create:

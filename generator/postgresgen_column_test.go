@@ -1,4 +1,4 @@
-package postgresgen
+package generator
 
 import (
 	"testing"

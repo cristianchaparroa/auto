@@ -141,7 +141,6 @@ func (p *ModelFieldParser) IsRelation(tags []*meta.Tag) bool {
 func (p *ModelFieldParser) ParseTags(fieldStr string) []*meta.Tag {
 	tp := NewModelTagParser()
 	tagsLine := tp.ExtractTagStatement(fieldStr)
-
 	tags := tp.Parse(tagsLine)
 	return tags
 }

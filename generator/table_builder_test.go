@@ -19,7 +19,7 @@ func TestNewTableBuilder(t *testing.T) {
 	}{
 		{connection.MysqlDriver, "<nil>"},
 		{connection.OracleDriver, "<nil>"},
-		{connection.PostgresDriver, "*postgresgen.PostgresTable"},
+		{connection.PostgresDriver, "*generator.PostgresTable"},
 	}
 
 	for _, tc := range test {

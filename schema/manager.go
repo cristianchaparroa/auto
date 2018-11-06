@@ -22,10 +22,10 @@ type Manager interface {
 	Clean() error
 
 	// CreateTable table in the current schema
-	CreateTable(ms *meta.ModelStruct) (sql.Result, error)
+	CreateTable(ms *meta.ModelStruct) (*PartialResult, error)
 
 	// CreateTables creates multiples tables
-	CreateTables(ms []*meta.ModelStruct) ([]sql.Result, error)
+	CreateTables(ms []*meta.ModelStruct) ([]*PartialResult, []error)
 }
 
 // ManagerBuilder handle the schema Manager
@@ -81,43 +81,54 @@ func GetConnection(c *connection.Config) *sql.DB {
 }
 
 // CreateTable create a table in database
-func (m *DatabaseManager) CreateTable(ms *meta.ModelStruct) (sql.Result, error) {
+func (m *DatabaseManager) CreateTable(ms *meta.ModelStruct) (*PartialResult, error) {
+
+	pr := &PartialResult{}
+
 	log.Info(fmt.Sprintf("auto:processing the model: %s \n", ms.ModelName))
 	c := m.Connection
 
 	tb := generator.NewTableBuilder()
 	tg := tb.GetTableGenerator(m.Config.Driver)
-	sql, err := tg.Generate(ms)
-	log.Info(fmt.Sprintf("\nauto:The sql generated is: \n %s \n", sql))
+
+	tableResult, err := tg.Generate(ms)
+	log.Info(fmt.Sprintf("\nauto:The sql generated is: \n %s \n", tableResult.SqlResult))
 
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.Exec(sql)
+	res, err := c.Exec(tableResult.SqlResult)
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
+	pr.Model = ms
+	pr.SqlExecuted = tableResult.SqlResult
+	pr.Res = res
+	pr.Relations = tableResult.Relations
 	log.Info(fmt.Sprintf("auto:processing the model: %s was finnished \n\n", ms.ModelName))
-	return res, nil
+	return pr, nil
 }
 
 // CreateTables creates in database multiples tables
-func (m *DatabaseManager) CreateTables(ms []*meta.ModelStruct) ([]sql.Result, error) {
+func (m *DatabaseManager) CreateTables(ms []*meta.ModelStruct) ([]*PartialResult, []error) {
 
-	rs := make([]sql.Result, 0)
+	rs := make([]*PartialResult, 0)
+
+	errors := make([]error, 0)
+
 	for _, model := range ms {
 		r, err := m.CreateTable(model)
 
 		if err != nil {
-			return nil, err
+			errors = append(errors, err)
+			continue
 		}
 
 		rs = append(rs, r)
 	}
 
-	return rs, nil
+	return rs, errors
 }

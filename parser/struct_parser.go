@@ -103,7 +103,6 @@ func (p *ModelStructParser) Parse(structStr string) (*meta.ModelStruct, error) {
 
 	fp := NewModelFieldParser()
 	fields := fp.ParseFields(content)
-
 	model.Fields = fields
 
 	return model, nil

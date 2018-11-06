@@ -2,7 +2,6 @@ package generator
 
 import (
 	"github.com/cristianchaparroa/auto/connection"
-	"github.com/cristianchaparroa/auto/generator/postgresgen"
 )
 
 // TableBuilder creates an instance of Table generator
@@ -17,7 +16,7 @@ func NewTableBuilder() *TableBuilder {
 // GetTableGenerator retrieves the table generator according with the driver
 func (b *TableBuilder) GetTableGenerator(Driver string) TableGenerator {
 	if Driver == connection.PostgresDriver {
-		return postgresgen.NewPostgresTable()
+		return NewPostgresTable()
 	}
 
 	if Driver == connection.OracleDriver {

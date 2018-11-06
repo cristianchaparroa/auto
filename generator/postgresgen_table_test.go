@@ -1,4 +1,4 @@
-package postgresgen
+package generator
 
 import (
 	"testing"
@@ -19,7 +19,7 @@ func TestPostgresTableGenerate(t *testing.T) {
 
 	m := &meta.ModelStruct{ModelName: "users"}
 
-	sql, err := pt.Generate(m)
+	result, err := pt.Generate(m)
 
 	if err != nil {
 		t.Error(err)
@@ -27,8 +27,8 @@ func TestPostgresTableGenerate(t *testing.T) {
 
 	sqlExpected := `CREATE TABLE USERS ();`
 
-	if sql != sqlExpected {
-		t.Errorf("Expected the following sql:%v but get:%v", sqlExpected, sql)
+	if result.GetSQLResult() != sqlExpected {
+		t.Errorf("Expected the following sql:%v but get:%v", sqlExpected, result.GetSQLResult())
 	}
 }
 

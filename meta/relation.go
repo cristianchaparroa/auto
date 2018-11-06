@@ -98,6 +98,6 @@ type Relation struct {
 }
 
 func (rel *Relation) String() string {
-	return fmt.Sprintf("Relation[Type:%v, Name:%s, To:%s, MappedBy:%s]",
+	return fmt.Sprintf("meta.Relation(Type:%v, Name:%s, To:%s, MappedBy:%s)",
 		rel.Typ, rel.Name, rel.To, rel.MappedBy)
 }
