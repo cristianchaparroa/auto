@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/cristianchaparroa/auto/connection"
 	"github.com/cristianchaparroa/auto/meta"
@@ -18,6 +19,7 @@ type PostgresManager struct {
 func NewPostgresManager(c *connection.Config) *PostgresManager {
 	conn := GetConnection(c)
 	pm := &PostgresManager{&DatabaseManager{Config: c, Connection: conn}}
+
 	return pm
 }
 
@@ -42,7 +44,8 @@ func (m *PostgresManager) Clean() error {
 // Execute generates the whole changes in the schema
 func (m *PostgresManager) Execute(ms []*meta.ModelStruct) error {
 
-	fmt.Println("Executing...")
+	defer TimeTrack(time.Now(), "PostgresManager.Execute")
+
 	err := m.Clean()
 
 	if err != nil {
@@ -51,8 +54,6 @@ func (m *PostgresManager) Execute(ms []*meta.ModelStruct) error {
 
 	resps, errs := m.CreateTables(ms)
 
-	fmt.Println("--------responses------")
-	fmt.Println(len(resps))
 	var buffer bytes.Buffer
 
 	for _, err := range errs {
@@ -65,13 +66,11 @@ func (m *PostgresManager) Execute(ms []*meta.ModelStruct) error {
 		return errors.New(finalErr)
 	}
 
-	fmt.Println("--------relations------")
-
 	fs := make([]*meta.Field, 0)
 	for _, r := range resps {
 		fs = append(fs, r.Relations...)
 	}
-	fmt.Println(len(fs))
+
 	for _, rel := range fs {
 		fmt.Println(rel)
 	}

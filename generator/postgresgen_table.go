@@ -46,6 +46,11 @@ func (g *PostgresTable) Generate(m *meta.ModelStruct) (ITableResult, error) {
 	}
 
 	result.Relations = relations
-	result.SqlResult = buffer.String()
+	result.SQLResult = buffer.String()
 	return result, nil
+}
+
+// CreateRelation generates a relation between to models
+func (g *PostgresTable) CreateRelation(field *meta.Field) (string, error) {
+	return "", nil
 }

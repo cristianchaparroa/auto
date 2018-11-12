@@ -99,3 +99,38 @@ func TestParseRelationFields(t *testing.T) {
 	}
 
 }
+
+func TestParseTagsAttributes(t *testing.T) {
+	fieldShouldBePK := "Name string `sql:\"pk\"`"
+	fieldShoudlBeUnique := "Name string `sql:\"unique=true\"`"
+	fieldShouldBeNotNull := "Name string `sql:\"nullable=false\"`"
+
+	fp := NewModelFieldParser()
+
+	pkField, err := fp.Parse(fieldShouldBePK)
+	checkError(t, err)
+
+	uniqueField, err := fp.Parse(fieldShoudlBeUnique)
+	checkError(t, err)
+
+	notNullField, err := fp.Parse(fieldShouldBeNotNull)
+	checkError(t, err)
+
+	if pkField.IsPrimaryKey != true {
+		t.Error("Expected a primary key field but get false")
+	}
+
+	if uniqueField.IsUnique != true {
+		t.Error("Expected a unique field but get false")
+	}
+
+	if notNullField.IsNotNull != true {
+		t.Error("Expected a not null field but get false")
+	}
+}
+
+func checkError(t *testing.T, err error) {
+	if err != nil {
+		t.Error(err)
+	}
+}

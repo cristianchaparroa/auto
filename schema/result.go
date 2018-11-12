@@ -17,7 +17,7 @@ type PartialResult struct {
 	Model *meta.ModelStruct
 
 	// SqlExecuted is the sql generated without relations
-	SqlExecuted string
+	SQLExecuted string
 	// Reltations are the fields that contains relations with other models
 	// These relations must be proccesed after all tables witout dependeces are creted
 	Relations []*meta.Field

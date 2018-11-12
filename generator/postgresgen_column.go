@@ -29,6 +29,18 @@ func (g *PostgresColumn) Create(tableName string, f *meta.Field) (string, error)
 	tableName = strings.ToUpper(tableName)
 	columnName := tb.GetName(f.Name)
 	sql := fmt.Sprintf(`ALTER TABLE %v ADD COLUMN %v %v`, tableName, columnName, dataTypeStr)
+
+	if f.IsPrimaryKey {
+		sql = fmt.Sprintf("%s PRIMARY KEY", sql)
+	}
+	if f.IsNotNull {
+		sql = fmt.Sprintf("%s NOT NULL", sql)
+	}
+
+	if f.IsUnique {
+		sql = fmt.Sprintf("%s UNIQUE", sql)
+	}
+
 	return sql, nil
 }
 
@@ -47,4 +59,10 @@ func (g *PostgresColumn) ChangeType(tableName string, f *meta.Field) (string, er
 
 	sql := fmt.Sprintf(`ALTER TABLE %v ALTER COLUMN %v TYPE %v`, tableName, columnName, dataTypeStr)
 	return sql, nil
+}
+
+// CreatePrimaryKey creates the query
+func (g *PostgresColumn) CreatePrimaryKey(tableName, columnName string) string {
+	sql := fmt.Sprintf("ALTER TABLE %s ADD PRIMARY KEY (%s)", tableName, columnName)
+	return sql
 }

@@ -2,7 +2,7 @@ package schema
 
 import (
 	"fmt"
-	"log"
+
 	"strings"
 	"testing"
 	"time"
@@ -10,11 +10,13 @@ import (
 	"github.com/cristianchaparroa/auto/connection"
 	"github.com/cristianchaparroa/auto/meta"
 
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
 func TestParalleManagerCreateTables(t *testing.T) {
-	defer timeTrack(time.Now(), "TestManagerCreateTables")
+	log.SetLevel(log.WarnLevel)
+	defer TimeTrack(time.Now(), "TestParalleManagerCreateTables")
 
 	// 1. mocking the dependencies for connections
 	config := &connection.Config{Driver: connection.PostgresDriver}
@@ -59,9 +61,4 @@ func TestParalleManagerCreateTables(t *testing.T) {
 		fmt.Println(err)
 	}
 
-}
-
-func timeTrack(start time.Time, name string) {
-	elapsed := time.Since(start)
-	log.Printf("%s took %s", name, elapsed)
 }

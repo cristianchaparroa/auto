@@ -32,7 +32,7 @@ func (m *ParallelManager) CreateTable(ms *meta.ModelStruct, queue chan *PartialR
 	tg := tb.GetTableGenerator(m.Config.Driver)
 
 	tableResult, err := tg.Generate(ms)
-	log.Info(fmt.Sprintf("auto:The sql generated is:%s \n", tableResult.SqlResult))
+	log.Info(fmt.Sprintf("auto:The sql generated is:%s \n", tableResult.GetSQLResult()))
 
 	if err != nil {
 		pr.Error = err
@@ -41,7 +41,7 @@ func (m *ParallelManager) CreateTable(ms *meta.ModelStruct, queue chan *PartialR
 	}
 
 	c := m.Connection
-	res, err := c.Exec(tableResult.SqlResult)
+	res, err := c.Exec(tableResult.GetSQLResult())
 
 	if err != nil {
 		pr.Error = err
@@ -50,9 +50,9 @@ func (m *ParallelManager) CreateTable(ms *meta.ModelStruct, queue chan *PartialR
 	}
 
 	pr.Model = ms
-	pr.SqlExecuted = tableResult.SqlResult
+	pr.SQLExecuted = tableResult.GetSQLResult()
 	pr.Res = res
-	pr.Relations = tableResult.Relations
+	pr.Relations = tableResult.GetRelations()
 	log.Info(fmt.Sprintf("auto:processing the model: %s was finnished \n\n", ms.ModelName))
 
 	queue <- pr
@@ -72,22 +72,23 @@ func (m *ParallelManager) CreateTables(models []*meta.ModelStruct) ([]*PartialRe
 
 	results := make([]*PartialResult, 0)
 
-	go func() {
-		for res := range queue {
+	go func(q chan *PartialResult, wg *sync.WaitGroup) {
+		for res := range q {
 			results = append(results, res)
 			wg.Done()
 		}
-	}()
+	}(queue, &wg)
 
 	wg.Wait()
 
-	errors := make([]error, 0)
+	/*
+		errors := make([]error, 0)
 
-	for _, resp := range results {
-		if resp.Error != nil {
-			errors = append(errors, resp.Error)
-		}
-	}
+		for _, resp := range results {
+			if resp.Error != nil {
+				errors = append(errors, resp.Error)
+			}
+		}*/
 
-	return results, errors
+	return results, nil
 }

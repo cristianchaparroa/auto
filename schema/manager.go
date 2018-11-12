@@ -22,7 +22,7 @@ type Manager interface {
 	Clean() error
 
 	// CreateTable table in the current schema
-	CreateTable(ms *meta.ModelStruct) (*PartialResult, error)
+	// CreateTable(ms *meta.ModelStruct) (*PartialResult, error)
 
 	// CreateTables creates multiples tables
 	CreateTables(ms []*meta.ModelStruct) ([]*PartialResult, []error)
@@ -92,22 +92,22 @@ func (m *DatabaseManager) CreateTable(ms *meta.ModelStruct) (*PartialResult, err
 	tg := tb.GetTableGenerator(m.Config.Driver)
 
 	tableResult, err := tg.Generate(ms)
-	log.Info(fmt.Sprintf("\nauto:The sql generated is: \n %s \n", tableResult.SqlResult))
+	log.Info(fmt.Sprintf("\nauto:The sql generated is: \n %s \n", tableResult.GetSQLResult()))
 
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.Exec(tableResult.SqlResult)
+	res, err := c.Exec(tableResult.GetSQLResult())
 
 	if err != nil {
 		return nil, err
 	}
 
 	pr.Model = ms
-	pr.SqlExecuted = tableResult.SqlResult
+	pr.SQLExecuted = tableResult.GetSQLResult()
 	pr.Res = res
-	pr.Relations = tableResult.Relations
+	pr.Relations = tableResult.GetRelations()
 	log.Info(fmt.Sprintf("auto:processing the model: %s was finnished \n\n", ms.ModelName))
 	return pr, nil
 }

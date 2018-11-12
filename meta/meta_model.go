@@ -48,6 +48,15 @@ type Field struct {
 	// It identifies the current field as Relation
 	IsRelation bool
 
+	// IsPrimaryKey indicates if current field is a primary key
+	IsPrimaryKey bool
+
+	// IsNotNull indicates if current field is not null.
+	IsNotNull bool
+
+	// IsUnique indicates if current field is unique
+	IsUnique bool
+
 	// Relation
 	Relation *Relation
 }

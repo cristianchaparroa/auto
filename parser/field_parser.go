@@ -63,6 +63,9 @@ func (p *ModelFieldParser) Parse(fieldStr string) (*meta.Field, error) {
 	if len(tags) > 0 {
 		mf.Tags = tags
 		mf.IsRelation = p.IsRelation(tags)
+		mf.IsPrimaryKey = p.IsPrimaryKey(tags)
+		mf.IsNotNull = p.IsNotNull(tags)
+		mf.IsUnique = p.IsUnique(tags)
 	}
 
 	if mf.IsRelation {
@@ -125,24 +128,16 @@ func (p *ModelFieldParser) ParseFields(structContent string) []*meta.Field {
 	return fs
 }
 
-// IsRelation verifies if the field is a relation statement
-func (p *ModelFieldParser) IsRelation(tags []*meta.Tag) bool {
+// ContainsTag verifies if contains and specific tag
+func (p *ModelFieldParser) ContainsTag(tagRelation string, tags []*meta.Tag) bool {
 
 	for _, t := range tags {
-		if fmt.Sprintf("%v", t.Typ) == string(TypeTagRelation) {
+		if fmt.Sprintf("%v", t.Typ) == tagRelation {
 			return true
 		}
 	}
 
 	return false
-}
-
-// ParseTags retrieves the tags in a field statement
-func (p *ModelFieldParser) ParseTags(fieldStr string) []*meta.Tag {
-	tp := NewModelTagParser()
-	tagsLine := tp.ExtractTagStatement(fieldStr)
-	tags := tp.Parse(tagsLine)
-	return tags
 }
 
 // ParseRelation retrieves the relation statement according with field definition
@@ -162,4 +157,36 @@ func (p *ModelFieldParser) ParseRelation(fieldName string, tags []*meta.Tag) (*m
 		return nil, err
 	}
 	return rel, nil
+}
+
+// ParseTags retrieves the tags in a field statement
+func (p *ModelFieldParser) ParseTags(fieldStr string) []*meta.Tag {
+	tp := NewModelTagParser()
+	tagsLine := tp.ExtractTagStatement(fieldStr)
+	tags := tp.Parse(tagsLine)
+	return tags
+}
+
+// IsRelation verifies if the field is a relation statement
+func (p *ModelFieldParser) IsRelation(tags []*meta.Tag) bool {
+	tagRelation := string(TypeTagRelation)
+	return p.ContainsTag(tagRelation, tags)
+}
+
+// IsPrimaryKey verifies if the current field is a primary key
+func (p *ModelFieldParser) IsPrimaryKey(tags []*meta.Tag) bool {
+	tagRelation := string(TypeTagPrimaryKey)
+	return p.ContainsTag(tagRelation, tags)
+}
+
+// IsNotNull verifies is the current field should not null
+func (p *ModelFieldParser) IsNotNull(tags []*meta.Tag) bool {
+	tagRelation := string(TypeTagNullable)
+	return p.ContainsTag(tagRelation, tags)
+}
+
+// IsUnique verifies is the current field should unique
+func (p *ModelFieldParser) IsUnique(tags []*meta.Tag) bool {
+	tagRelation := string(TypeTagUnique)
+	return p.ContainsTag(tagRelation, tags)
 }

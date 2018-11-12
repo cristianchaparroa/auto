@@ -13,25 +13,32 @@ type ITableResult interface {
 type TableResult struct {
 	Model     *meta.ModelStruct
 	Relations []*meta.Field
-	SqlResult string
+	SQLResult string
 }
 
+// GetModel retrieves the model proccesed
 func (r *TableResult) GetModel() *meta.ModelStruct {
 	return r.GetModel()
 }
 
+// GetRelations retrieves the relations that will be processed after
+// create all the tables
 func (r *TableResult) GetRelations() []*meta.Field {
 	return r.Relations
 }
 
+// GetSQLResult retrieves the sql that was executed
 func (r *TableResult) GetSQLResult() string {
-	return r.SqlResult
+	return r.SQLResult
 }
 
 // TableGenerator interface defines the methods that allow you to create sql for tables
 type TableGenerator interface {
 	// Generate the sql query to create a table with fields
 	Generate(*meta.ModelStruct) (ITableResult, error)
+
+	// CreateRelation is in charge to create relation between tables
+	CreateRelation(field *meta.Field) (string, error)
 }
 
 // ColumnGenerator interface defines the methods for create or modified  a column
