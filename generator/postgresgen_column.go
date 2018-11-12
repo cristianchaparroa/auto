@@ -60,9 +60,3 @@ func (g *PostgresColumn) ChangeType(tableName string, f *meta.Field) (string, er
 	sql := fmt.Sprintf(`ALTER TABLE %v ALTER COLUMN %v TYPE %v`, tableName, columnName, dataTypeStr)
 	return sql, nil
 }
-
-// CreatePrimaryKey creates the query
-func (g *PostgresColumn) CreatePrimaryKey(tableName, columnName string) string {
-	sql := fmt.Sprintf("ALTER TABLE %s ADD PRIMARY KEY (%s)", tableName, columnName)
-	return sql
-}

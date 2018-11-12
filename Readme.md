@@ -38,6 +38,36 @@ user: userlist
 password: userlist
 ```
 
+### Column attributes supported
+
+The framework will scan the tags defined in the each member of struct. The following are the attributes supported
+
+**1. Primary Key:**
+The attribute should indicates that current member is primary key of model
+```go
+type Post struct {
+	Id int `sql:"pk"`
+}
+```
+
+**2. Unique:**
+The attribute should indicates that current member is unique.
+
+```go
+type Post struct {
+	Id int `sql:"pk"`
+	Title string `sql:"unique=true"`
+}
+```
+
+**3. nullable:**
+It Determines if NULL values allowed for this column. If not specified, default value is false.
+```go
+type Post struct {
+	Id int `sql:"pk"`
+	Title string `sql:"nullable=false"`
+}
+```
 
 ### Relations supported
 
