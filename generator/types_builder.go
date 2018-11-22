@@ -82,6 +82,10 @@ func (b *TypeColumnBuilder) GetType(f *meta.Field) (TypeColumn, error) {
 
 	ft := f.Typ
 
+	if ft == nil {
+		return "", errors.New(TypeColumnTyoeFieldNil)
+	}
+
 	if ft.Name == parser.TypeFieldString {
 		return TypePosgresVarchar, nil
 	}

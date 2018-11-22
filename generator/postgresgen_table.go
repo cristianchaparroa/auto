@@ -51,6 +51,38 @@ func (g *PostgresTable) Generate(m *meta.ModelStruct) (ITableResult, error) {
 }
 
 // CreateRelation generates a relation between to models
-func (g *PostgresTable) CreateRelation(field *meta.Field) (string, error) {
+func (g *PostgresTable) CreateRelation(model *meta.ModelStruct, field *meta.Field) (string, error) {
+
+	r := field.Relation
+
+	if r.Typ == meta.OneToOne {
+		return g.CreateOneToOne(model, field)
+	}
+
 	return "", nil
+}
+
+// CreateOneToOne generate the sql that generates the field and respective constraint
+func (g *PostgresTable) CreateOneToOne(model *meta.ModelStruct, field *meta.Field) (string, error) {
+
+	pc := NewPostgresColumn()
+
+	parentTable := model.ModelName
+	childTable := field.Relation.To
+
+	pkParentTable := model.GetPrimaryKey()
+	pkChildTable := field.Relation.PKRef
+
+	constraintName := ""
+
+	sqlField, err := pc.Create(parentTable, field)
+
+	if err != nil {
+		return "", err
+	}
+
+	sql := `ALTER TABLE %s ADD CONSTRAINT %s FOREIGN KEY (%) REFERENCES %s (%s)`
+	sqlConstraint := fmt.Sprintf(sql, childTable, constraintName, pkChildTable, parentTable, pkParentTable)
+
+	return fmt.Sprintf("%s \n %s", sqlField, sqlConstraint), nil
 }

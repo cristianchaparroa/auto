@@ -38,7 +38,7 @@ type TableGenerator interface {
 	Generate(*meta.ModelStruct) (ITableResult, error)
 
 	// CreateRelation is in charge to create relation between tables
-	CreateRelation(field *meta.Field) (string, error)
+	CreateRelation(model *meta.ModelStruct, field *meta.Field) (string, error)
 }
 
 // ColumnGenerator interface defines the methods for create or modified  a column

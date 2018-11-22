@@ -81,8 +81,7 @@ Suppose that you have the Post of web page and you have the PostDetail related t
 ```go
 type Post struct {
 	Id string
-	PostDetail PostDetail `sql:"rel=(type:11; to:PostDetail)" json:"post_detail"`
-	// PostDetail PostDetail `sql:rel=(type:11)`
+	PostDetail PostDetail `json:"post_detail"`
 }
 ```
 The following is the tag statament relation int the model PostDetail:
@@ -90,7 +89,7 @@ The following is the tag statament relation int the model PostDetail:
 ```go
 type PostDetail struct {
 	Id string
-	Post `sql:"rel=(type:11; mappedBy:Post; name:post_id)"`
+	Post Post `sql:"rel=(type:11; name:post_id; pkref:Id)"`
 }
 ```
 

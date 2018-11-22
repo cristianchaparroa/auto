@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/cristianchaparroa/auto/meta"
@@ -59,4 +60,38 @@ func TestPostgresTableGenerateWithFields(t *testing.T) {
 		t.Error(err)
 	}
 	//fmt.Println(sql)
+}
+
+func TestPostgresTableCreateOneToOne(t *testing.T) {
+	m := &meta.ModelStruct{}
+	m.ModelName = "PostDetail"
+
+	typeInt := &meta.TypeField{Name: parser.TypeFieldInteger}
+
+	pk := &meta.Field{Name: "Id", Typ: typeInt}
+	fs := make([]*meta.Field, 0)
+	fs = append(fs, pk)
+
+	f := &meta.Field{Name: "Post"}
+	f.IsRelation = true
+
+	r := &meta.Relation{}
+	r.To = "Post"
+	r.Name = "post_id"
+	r.PKRef = "Id" // This the Post.Id
+	r.FK = "fk_post_id_post_detail_id"
+	f.Relation = r
+
+	fs = append(fs, f)
+
+	m.Fields = fs
+
+	pg := NewPostgresTable()
+	sql, err := pg.CreateOneToOne(m, f)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	fmt.Println(sql)
 }

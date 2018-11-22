@@ -52,14 +52,17 @@ func (p *TagRelationParser) Parse(val, fieldName string) (*meta.Relation, error)
 			rel.To = attVal
 		}
 
-		if "mappedBy" == attType {
-			rel.MappedBy = attVal
-		}
-
 		if "name" == attType {
 			rel.Name = attVal
 		}
 
+		if "pkref" == attType {
+			rel.PKRef = attVal
+		}
+
+		if "fk" == attType {
+			rel.FK = attVal
+		}
 		if len(rel.To) == 0 {
 			rel.To = fieldName
 		}

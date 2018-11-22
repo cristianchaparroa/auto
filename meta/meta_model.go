@@ -79,6 +79,29 @@ type ModelStruct struct {
 	Fields []*Field
 }
 
+// GetPrimaryKey retrieves the primary key on Model if exists.
+func (m ModelStruct) GetPrimaryKey() *Field {
+
+	for _, f := range m.Fields {
+		if f.IsPrimaryKey {
+			return f
+		}
+	}
+	return nil
+}
+
+// GetRelations retrieve the relations in the model
+func (m ModelStruct) GetRelations() []*Field {
+	rs := make([]*Field, 0)
+
+	for _, f := range m.Fields {
+		if f.IsRelation {
+			rs = append(rs, f)
+		}
+	}
+	return rs
+}
+
 func (m ModelStruct) String() string {
 
 	var buffer bytes.Buffer

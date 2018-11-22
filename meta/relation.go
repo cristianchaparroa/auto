@@ -94,10 +94,14 @@ type Relation struct {
 	// To indicates the direction of relation
 	To string
 
-	MappedBy string
+	// PKRef
+	PKRef string
+
+	// Constraint Name
+	FK string
 }
 
 func (rel *Relation) String() string {
-	return fmt.Sprintf("meta.Relation(Type:%v, Name:%s, To:%s, MappedBy:%s)",
-		rel.Typ, rel.Name, rel.To, rel.MappedBy)
+	return fmt.Sprintf("meta.Relation(Type:%v, Name:%s, To:%s)",
+		rel.Typ, rel.Name, rel.To)
 }
